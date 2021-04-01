@@ -12,17 +12,19 @@ Quickly start nest.js project for you
 ## Installation
 
 ```bash
-$ yarn  install
+$ yarn install
+$ yarn db:migrate
+$ yarn db:generate
 ```
 
 ## Running the app
 
 ```bash
 # development
-$ npm run start
+$ yarn start
 
 # watch mode
-$ npm run start:dev
+$ npm start:dev
 
 ```
 
