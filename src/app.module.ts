@@ -11,7 +11,13 @@ import { routes } from './routes';
 import { APP_GUARD } from '@nestjs/core';
 
 @Module({
-  imports: [RouterModule.forRoutes(routes), AuthModule, UsersModule, ApiModule, UsersModule],
+  imports: [
+    RouterModule.forRoutes(routes),
+    AuthModule,
+    UsersModule,
+    ApiModule,
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
@@ -21,11 +27,8 @@ import { APP_GUARD } from '@nestjs/core';
     },
   ],
 })
-
-export class AppModule implements NestModule{
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AntdResultMiddleware)
-      .forRoutes('/api');
+    consumer.apply(AntdResultMiddleware).forRoutes('/api');
   }
 }
