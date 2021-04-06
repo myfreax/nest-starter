@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "ts-node": "ts-node --compiler-options '{\"module\":\"CommonJS\"}'",
-    "db:studio":"prisma studio",
+    "db:studio": "prisma studio",
     "db:deploy": "NODE_ENV=production dotenv-flow -- yarn prisma migrate deploy --preview-feature",
     "db:migrate": "dotenv-flow -- yarn prisma migrate dev --preview-feature",
     "db:generate": "yarn prisma generate",
@@ -23,6 +23,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
+    "test:coveralls": "jest --coverage && coveralls < coverage/lcov.info",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config jest.json"
   },
@@ -59,6 +60,7 @@
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
     "@typescript-eslint/parser": "^4.15.2",
+    "coveralls": "^3.1.0",
     "eslint": "^7.20.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",

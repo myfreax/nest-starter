@@ -1,11 +1,14 @@
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
+import { UsersService } from '../users/users.service';
 import { UsersModule } from '../users/users.module';
 import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
+import { SharedModule } from '../shared/shared.module';
+import { PrismaService } from '../shared/prisma.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -13,6 +16,7 @@ describe('AuthService', () => {
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [
+        SharedModule,
         UsersModule,
         PassportModule,
         JwtModule.register({
@@ -20,7 +24,13 @@ describe('AuthService', () => {
           signOptions: { expiresIn: '60s' },
         }),
       ],
-      providers: [AuthService, LocalStrategy, JwtStrategy],
+      providers: [
+        PrismaService,
+        AuthService,
+        LocalStrategy,
+        JwtStrategy,
+        UsersService,
+      ],
     }).compile();
 
     service = moduleRef.get<AuthService>(AuthService);

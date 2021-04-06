@@ -7,7 +7,7 @@ describe('UsersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports:[SharedModule],
+      imports: [SharedModule],
       providers: [UsersService],
     }).compile();
 

@@ -3,7 +3,7 @@ import { SharedModule } from '../shared/shared.module';
 import { UsersService } from './users.service';
 
 @Module({
-  imports:[SharedModule],
+  imports: [SharedModule],
   providers: [UsersService],
   exports: [UsersService],
 })

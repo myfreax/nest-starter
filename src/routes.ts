@@ -5,8 +5,6 @@ export const routes: Routes = [
   {
     path: '/api',
     module: ApiModule,
-    children: [
-      { path: '/auth', module: AuthModule }
-    ],
+    children: [{ path: '/auth', module: AuthModule }],
   },
 ];

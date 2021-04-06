@@ -2,6 +2,12 @@
 # nest-starter
 Quickly start nest.js project for you
 
+<p>
+  <a href="https://circleci.com/gh/huangyanxiong01/nest-starter"><img src="https://img.shields.io/badge/License-MIT-brightgreen.svg"></a>
+  <a href="https://circleci.com/gh/huangyanxiong01/nest-starter"><img src="https://circleci.com/gh/huangyanxiong01/nest-starter.svg?style=shield"></a>
+  <a href="https://coveralls.io/github/huangyanxiong01/nest-starter"><img class="notice-badge" src="https://coveralls.io/repos/github/huangyanxiong01/nest-starter/badge.svg?branch=main" alt="Badge"></a>
+</p>
+
 ## Feature
   - Auto validate with class-validator
   - Adheres OpenAPI specification by swagger
