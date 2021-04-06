@@ -29,9 +29,14 @@ jobs:
         yarn install
         yarn db:migrate
         yarn db:generate
-        yarn test:coveralls
-
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
+        yarn test:cov
+  
+    - name: codecov
+    - uses: codecov/codecov-action@v1
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+        directory: ./coverage/
+        flags: unittests # optional
+        name: codecov-umbrella # optional
+        fail_ci_if_error: true # optional (default = false)
+        verbose: true # optional (default = false)
