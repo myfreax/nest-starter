@@ -3,9 +3,9 @@
 Quickly start nest.js project for you
 
 <p>
-  <a href="https://circleci.com/gh/huangyanxiong01/nest-starter"><img src="https://img.shields.io/badge/License-MIT-brightgreen.svg"></a>
-  <a href="https://circleci.com/gh/huangyanxiong01/nest-starter"><img src="https://circleci.com/gh/huangyanxiong01/nest-starter.svg?style=shield"></a>
-  <a href="https://coveralls.io/github/huangyanxiong01/nest-starter"><img class="notice-badge" src="https://coveralls.io/repos/github/huangyanxiong01/nest-starter/badge.svg?branch=main" alt="Badge"></a>
+  <a href="https://circleci.com/gh/huangyanxiong01/nest-starter"><img src="https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg"></a>
+  <a href="https://github.com/huangyanxiong01/nest-starter/actions/workflows/node.yml"><img src="https://github.com/huangyanxiong01/nest-starter/actions/workflows/node.yml/badge.svg"></a>
+  <a href="https://app.codecov.io/gh/huangyanxiong01/nest-starter"><img class="notice-badge" src="https://codecov.io/gh/huangyanxiong01/nest-starter/branch/main/graphs/badge.svg?branch=main" alt="Badge"></a>
 </p>
 
 ## Feature
@@ -19,6 +19,7 @@ Quickly start nest.js project for you
 
 ```bash
 $ yarn install
+$ yarn db:reset
 $ yarn db:migrate
 $ yarn db:generate
 ```
@@ -36,4 +37,4 @@ $ npm start:dev
 
 ## License
 
-nest-starter is [MIT licensed](LICENSE).
+nest-starter is [Apache-2.0 License](LICENSE).
