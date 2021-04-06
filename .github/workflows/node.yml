@@ -6,7 +6,7 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-20.04
-    container: ubuntu:20.04
+    container: node:14
     services:
       # Label used to access the service container
        postgres:
@@ -23,11 +23,6 @@ jobs:
           --health-retries 5
     steps:
     - uses: actions/checkout@v2
-
-    - name: Use Node.js 14.15
-      uses: actions/setup-node@v2
-      with:
-        node-version: 14.15
 
     - name: yarn test:coveralls
       run: |
