@@ -6,8 +6,6 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-20.04
-    # Docker Hub image that `Test` executes in
-    container: ubuntu:20.04
     services:
       # Label used to access the service container
        postgres:
@@ -23,10 +21,10 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v2
 
     - name: Use Node.js 14.15
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: 14.15
 
