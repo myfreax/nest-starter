@@ -9,7 +9,7 @@ jobs:
       - checkout
       - node/install:
           install-yarn: true
-      - run: ls -al
+      - run: yarn install
 workflows:
   test_my_app:
     jobs:
