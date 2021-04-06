@@ -32,6 +32,8 @@ jobs:
       run: |
         yarn install
         yarn test:coveralls
+        yarn db:migrate
+        yarn db:generate
 
     - name: Coveralls
       uses: coverallsapp/github-action@master
