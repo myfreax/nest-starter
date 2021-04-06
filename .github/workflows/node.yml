@@ -28,12 +28,12 @@ jobs:
       with:
         node-version: 14.15
 
-    - name: yarn install, yarn test:coveralls 
+    - name: yarn test:coveralls
       run: |
         yarn install
-        yarn test:coveralls
         yarn db:migrate
         yarn db:generate
+        yarn test:coveralls
 
     - name: Coveralls
       uses: coverallsapp/github-action@master
