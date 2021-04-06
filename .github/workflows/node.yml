@@ -23,16 +23,14 @@ jobs:
           --health-retries 5
     steps:
     - uses: actions/checkout@v2
-
-    - name: yarn test:coveralls
+    - name: Generate coverage report
       run: |
         yarn install
         yarn db:migrate
         yarn db:generate
         yarn test:cov
-  
-    - name: codecov
-    - uses: codecov/codecov-action@v1
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
         directory: ./coverage/
