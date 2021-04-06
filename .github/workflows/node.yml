@@ -26,6 +26,7 @@ jobs:
     - name: Generate coverage report
       run: |
         yarn install
+        yarn db:reset
         yarn db:migrate
         yarn db:generate
         yarn test:cov
