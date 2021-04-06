@@ -12,6 +12,7 @@
     "db:migrate": "dotenv-flow -- yarn prisma migrate dev --preview-feature",
     "db:generate": "yarn prisma generate",
     "db:reset": "dotenv-flow -- yarn prisma migrate reset --preview-feature",
+    "db:forceReset": "dotenv-flow -- yarn prisma migrate reset --force --preview-feature",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
