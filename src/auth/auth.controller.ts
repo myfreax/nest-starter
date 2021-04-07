@@ -7,7 +7,7 @@ import { LoginDto } from './dto/login-dto';
 import { LoginedDto } from './dto/logined-dto';
 
 @ApiBearerAuth()
-@ApiTags('auth')
+@ApiTags('Auth')
 @Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -25,4 +25,11 @@ export class AuthController {
   async login(@Request() req) {
     return this.authService.login(req.user);
   }
+  
+  // https://stackoverflow.com/questions/21978658/invalidating-json-web-tokens/23089839#23089839
+  @Post('/loginout')
+  async loginOut(){
+    // return this.authService.loginout()
+  }
+  
 }

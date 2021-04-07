@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { UserEntity } from '../../users/user.entity';
+import { UserEntity } from '../../users/entities/user.entity';
 
 export class LoginDto extends UserEntity {
   @Expose()

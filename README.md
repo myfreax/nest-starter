@@ -17,7 +17,9 @@ Quickly start nest.js project for you
 
 ## Installation
 
+
 ```bash
+$ docker run -itd -p 5432:5432 --user 1000:1000 -e POSTGRES_PASSWORD=randompassword -v `pwd`/postgres/:/var/lib/postgresql/data --name postgres  postgres
 $ yarn install
 $ yarn db:reset
 $ yarn db:migrate
