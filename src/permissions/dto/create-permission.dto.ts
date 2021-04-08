@@ -1,5 +1,3 @@
-import { PermissionEntity } from "../entities/permission.entity";
+import { PermissionEntity } from '../entities/permission.entity';
 
-export class CreatePermissionDto extends PermissionEntity {
-        
-}
+export class CreatePermissionDto extends PermissionEntity {}

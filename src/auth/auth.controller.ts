@@ -25,11 +25,10 @@ export class AuthController {
   async login(@Request() req) {
     return this.authService.login(req.user);
   }
-  
-  // https://stackoverflow.com/questions/21978658/invalidating-json-web-tokens/23089839#23089839
+
+  //TODO https://stackoverflow.com/questions/21978658/invalidating-json-web-tokens/23089839#23089839
   @Post('/loginout')
-  async loginOut(){
+  async loginOut() {
     // return this.authService.loginout()
   }
-  
 }

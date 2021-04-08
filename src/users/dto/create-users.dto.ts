@@ -1,15 +1,10 @@
 import { UserEntity } from '../entities/user.entity';
-import { Expose, Type } from 'class-transformer';
-import { IsString, IsEmail, MinLength, IsOptional } from 'class-validator';
+import { Expose } from 'class-transformer';
+import { IsEmail } from 'class-validator';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 
-export class CreateUsersDto implements Omit<UserEntity, 'id'> {
-  @Expose()
+export class CreateUsersDto extends OmitType(UserEntity, ['id'] as const) {
   email: string;
-
-  @Expose()
   password: string;
-
-  @Expose()
-  @IsOptional()
   roleId: number;
 }

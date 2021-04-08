@@ -16,7 +16,8 @@ import { PermissionsModule } from './permissions/permissions.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: process.env.NODE_ENV == 'development'? '.env': '.porduction.env',
+      envFilePath:
+        process.env.NODE_ENV == 'development' ? '.env' : '.porduction.env',
     }),
     RouterModule.forRoutes(routes),
     AuthModule,

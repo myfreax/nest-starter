@@ -16,7 +16,7 @@ export class UsersService {
   async findOne(where: Condition<UserEntity>): Promise<UserEntity | null> {
     return this.prisma.user.findUnique({ where });
   }
-  
+
   /**
    * create user
    * @param createUserDto CreateUsersDto

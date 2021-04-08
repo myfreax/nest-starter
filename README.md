@@ -5,6 +5,7 @@ Quickly start nest.js project for you
 <p>
   <a href="https://circleci.com/gh/huangyanxiong01/nest-starter"><img src="https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg"></a>
   <a href="https://github.com/huangyanxiong01/nest-starter/actions/workflows/test.yml"><img src="https://github.com/huangyanxiong01/nest-starter/actions/workflows/test.yml/badge.svg"></a>
+  <a href="https://github.com/huangyanxiong01/nest-starter/actions/workflows/e2e.yml"><img src="https://github.com/huangyanxiong01/nest-starter/actions/workflows/e2e.yml/badge.svg"></a>
   <a href="https://app.codecov.io/gh/huangyanxiong01/nest-starter"><img class="notice-badge" src="https://codecov.io/gh/huangyanxiong01/nest-starter/branch/main/graphs/badge.svg?branch=main" alt="Badge"></a>
 </p>
 

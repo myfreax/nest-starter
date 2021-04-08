@@ -1,0 +1,32 @@
+on: ["push", "pull_request"]
+
+name: e2e
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-20.04
+    container: node:14
+    services:
+      # Label used to access the service container
+       postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: randompassword
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+    - uses: actions/checkout@v2
+    - name: Generate coverage report
+      run: |
+        yarn install
+        yarn db:forceReset
+        yarn db:migrate
+        yarn db:generate
+        yarn test:e2e

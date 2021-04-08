@@ -41,7 +41,7 @@ describe('AuthService', () => {
   it('should return a user object when credentials are valid', async () => {
     const res = await service.validateUser('maria@gmail.com', 'guess');
     if (res) {
-      expect(res).toHaveProperty('id');  
+      expect(res).toHaveProperty('id');
     }
   });
 
@@ -49,7 +49,6 @@ describe('AuthService', () => {
     const res = await service.validateUser('xxx', 'xxx');
     expect(res).toBeNull();
   });
-
 
   it('should return JWT object when credentials are valid', async () => {
     const res = await service.login({

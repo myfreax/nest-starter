@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
 import { PermissionsController } from './permissions.controller';
-import { SharedModule } from 'src/shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
 
 @Module({
-  imports:[SharedModule],
+  imports: [SharedModule],
   controllers: [PermissionsController],
-  providers: [PermissionsService]
+  providers: [PermissionsService],
 })
 export class PermissionsModule {}

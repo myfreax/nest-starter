@@ -3,28 +3,29 @@ import { SharedModule } from '../shared/shared.module';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { UserEntity } from './entities/user.entity';
+import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
-describe('UsersService', () => {
-  let service: UsersService;
+describe('UsersController', () => {
+  let controller: UsersController;
   let users: UserEntity[];
   beforeEach(async () => {
     users = [];
     const module: TestingModule = await Test.createTestingModule({
       imports: [SharedModule],
+      controllers: [UsersController],
       providers: [UsersService],
     }).compile();
 
-    service = module.get<UsersService>(UsersService);
+    controller = module.get<UsersController>(UsersController);
   });
-
   afterEach(async () => {
     // remove all created users
-    await Promise.all(users.map((user) => service.remove(user.id)));
+    await Promise.all(users.map((user) => controller.remove(user.id)));
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(controller).toBeDefined();
   });
   const createUser = async (afterRemove = true) => {
     const email =
@@ -38,21 +39,21 @@ describe('UsersService', () => {
       password: 'randomPassword',
       roleId: 1,
     };
-    const user = await service.create(createUsersDto);
+    const user = await controller.create(createUsersDto);
     if (afterRemove) {
       users.push(user);
     }
     return user;
   };
 
-  it('should create user', async () => {
+  it('should create user and return it', async () => {
     const user = await createUser();
     expect(user.id).toBeDefined();
   });
 
-  it('find user by id', async () => {
+  it('find one user by id', async () => {
     const user = await createUser();
-    const res = await service.findOne({ id: user.id });
+    const res = await controller.findOne(user.id);
     expect(res.id).toEqual(user.id);
   });
 
@@ -61,14 +62,14 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUsersDto = {
       password: 'randomPassword123456',
     };
-    user = await service.update(user.id, updateUserDto);
+    user = await controller.update(user.id, updateUserDto);
     expect(user.password).toEqual(updateUserDto.password);
   });
 
   it('should delete user by id', async () => {
     const user = await createUser(false);
-    await service.remove(user.id);
-    const res = await service.findOne({ id: user.id });
+    await controller.remove(user.id);
+    const res = await controller.findOne(user.id);
     expect(res).toEqual(null);
   });
 });
