@@ -26,7 +26,7 @@
     "test:cov": "jest --forceExit --coverage",
     "test:coveralls": "jest --coverage && coveralls < coverage/lcov.info",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config jest.json"
+    "test:e2e": "jest --forceExit --config jest.json"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.13",
