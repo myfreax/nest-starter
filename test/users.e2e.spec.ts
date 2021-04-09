@@ -6,7 +6,7 @@ import { CreateUsersDto } from '../src/users/dto/create-users.dto';
 import * as request from 'supertest';
 import { UserEntity } from '../src/users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { isEmail } from 'class-validator';
+import { isEmail, useContainer } from 'class-validator';
 const apiEndPoint = '/api/users';
 describe('UsersController (e2e)', () => {
   let app: INestApplication;
@@ -39,6 +39,7 @@ describe('UsersController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    useContainer(app, { fallbackOnErrors: true })
     const jwt = app.get<JwtService>(JwtService);
     token = jwt.sign({ email: 'web@myfreax.com', userId: 1, roleId: 1 });
     prisma = app.get<PrismaService>(PrismaService);
@@ -68,25 +69,55 @@ describe('UsersController (e2e)', () => {
       .send(user)
       .expect(401);
   });
-  // TODO: bellow the code always tell me email format error, ever isEmail(value) return true
-  // how fix it?
-  // it('/api/users (POST) create user', async () => {
-  //   const user = makeUser();
-  //   return request(app.getHttpServer())
-  //     .post(apiEndPoint)
-  //     .auth(token, bearer)
-  //     .set('Accept', 'application/json')
-  //     .expect('Content-Type', /json/)
-  //     .send(user)
-  //     .expect(400)
-  //     .then(({ body }) => {
-  //       expect(body).toHaveProperty('id');
-  //       expect(body.email).toEqual(user.email);
-  //     });
-  // });
+
+  it('/api/users (POST) create user', async () => {
+    const user = makeUser();
+    return request(app.getHttpServer())
+      .post(apiEndPoint)
+      .auth(token, bearer)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(user)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body).toHaveProperty('id');
+        expect(body.email).toEqual(user.email);
+      });
+  });
   it('/api/users (POST) create user with error email format', async () => {
     const user = makeUser(false);
     user.email = user.email.replace('@', '');
+    return request(app.getHttpServer())
+      .post(apiEndPoint)
+      .auth(token, bearer)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(user)
+      .expect(400)
+      .catch((err) => {
+        expect(err.error).toEqual('Bad Request');
+        expect(err.message).toBeInstanceOf(Array);
+      });
+  });
+
+  it('/api/users (POST) create user without password', async () => {
+    const user = makeUser(false);
+    user.password = '';
+    return request(app.getHttpServer())
+      .post(apiEndPoint)
+      .auth(token, bearer)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(user)
+      .expect(400)
+      .catch((err) => {
+        expect(err.error).toEqual('Bad Request');
+        expect(err.message).toBeInstanceOf(Array);
+      });
+  });
+  it('/api/users (POST) create user with error roleId', async () => {
+    const user = makeUser();
+    user.roleId = 10000000;
     return request(app.getHttpServer())
       .post(apiEndPoint)
       .auth(token, bearer)
