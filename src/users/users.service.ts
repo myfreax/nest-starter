@@ -2,24 +2,24 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../shared/prisma.service';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
-import { UserEntity } from './entities/user.entity';
+import { UniqueField, UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   /**
-   * find user by UserEntity unique key
-   * @param where
+   * find user by UserEntity unique index field
+   * @param where UniqueField
    * @returns UserEntity | null
    */
-  async findOne(where: Condition<UserEntity>): Promise<UserEntity | null> {
+  async findOne(where: Where<UniqueField>): Promise<UserEntity | null> {
     return this.prisma.user.findUnique({ where });
   }
 
   /**
    * create user
-   * @param createUserDto CreateUsersDto
+   * @param CreateUsersDto
    * @returns UserEntity | null
    */
   async create(createUserDto: CreateUsersDto): Promise<UserEntity | null> {
@@ -40,18 +40,21 @@ export class UsersService {
    * update user by id
    * @param id number
    * @param updateUserDto UpdateUsersDto
-   * @returns
+   * @returns UserEntity
    */
-  async update(id: number, updateUserDto: UpdateUsersDto): Promise<UserEntity> {
-    return this.prisma.user.update({ where: { id }, data: updateUserDto });
+  async update(
+    where: Where<UniqueField>,
+    updateUserDto: UpdateUsersDto,
+  ): Promise<UserEntity> {
+    return this.prisma.user.update({ where, data: updateUserDto });
   }
 
   /**
-   * delete user by id
-   * @param id
-   * @returns
+   * delete user by unique index field
+   * @param where UniqueField
+   * @returns UserEntity
    */
-  async remove(id: number): Promise<UserEntity> {
-    return this.prisma.user.delete({ where: { id } });
+  async remove(where: Where<UniqueField>): Promise<UserEntity> {
+    return this.prisma.user.delete({ where });
   }
 }

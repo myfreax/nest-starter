@@ -20,7 +20,7 @@ describe('UsersService', () => {
 
   afterEach(async () => {
     // remove all created users
-    await Promise.all(users.map((user) => service.remove(user.id)));
+    await Promise.all(users.map((user) => service.remove({ id: user.id })));
   });
 
   it('should be defined', () => {
@@ -61,13 +61,13 @@ describe('UsersService', () => {
     const updateUserDto: UpdateUsersDto = {
       password: 'randomPassword123456',
     };
-    user = await service.update(user.id, updateUserDto);
+    user = await service.update({ id: user.id }, updateUserDto);
     expect(user.password).toEqual(updateUserDto.password);
   });
 
   it('should delete user by id', async () => {
     const user = await createUser(false);
-    await service.remove(user.id);
+    await service.remove({ id: user.id });
     const res = await service.findOne({ id: user.id });
     expect(res).toEqual(null);
   });

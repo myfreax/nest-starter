@@ -20,8 +20,7 @@ describe('UsersController', () => {
     controller = module.get<UsersController>(UsersController);
   });
   afterEach(async () => {
-    // remove all created users
-    await Promise.all(users.map((user) => controller.remove(user.id)));
+    await Promise.all(users.map((user) => controller.remove({ id: user.id })));
   });
 
   it('should be defined', () => {
@@ -53,7 +52,7 @@ describe('UsersController', () => {
 
   it('find one user by id', async () => {
     const user = await createUser();
-    const res = await controller.findOne(user.id);
+    const res = await controller.findOne({ id: user.id });
     expect(res.id).toEqual(user.id);
   });
 
@@ -62,14 +61,14 @@ describe('UsersController', () => {
     const updateUserDto: UpdateUsersDto = {
       password: 'randomPassword123456',
     };
-    user = await controller.update(user.id, updateUserDto);
+    user = await controller.update({ id: user.id }, updateUserDto);
     expect(user.password).toEqual(updateUserDto.password);
   });
 
   it('should delete user by id', async () => {
     const user = await createUser(false);
-    await controller.remove(user.id);
-    const res = await controller.findOne(user.id);
+    await controller.remove({ id: user.id });
+    const res = await controller.findOne({ id: user.id });
     expect(res).toEqual(null);
   });
 });
