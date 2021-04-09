@@ -4,7 +4,7 @@ name: e2e
 
 jobs:
   test:
-    name: Test
+    name: e2e
     runs-on: ubuntu-20.04
     container: node:14
     services:
