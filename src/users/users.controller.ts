@@ -21,6 +21,7 @@ import { UserEntity } from './entities/user.entity';
 import { TokenExpiredError } from '../auth/dto/tokenExpiredError-dto';
 import { LoginedDto } from '../auth/dto/logined-dto';
 import { IdDto } from '../shared/dto/id-dto';
+import { ParamsValidateFailDto } from '../shared/dto/paramsValidateFail-dto';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -36,6 +37,12 @@ import { IdDto } from '../shared/dto/id-dto';
     UnauthorizedError: {},
   },
 })
+@ApiResponse({
+  status: 400,
+  description: 'params validate fail',
+  type: () => ParamsValidateFailDto,
+})
+
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

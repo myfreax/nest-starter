@@ -14,6 +14,8 @@ describe('UsersController (e2e)', () => {
   const emails: string[] = [];
   let token: string;
   const bearer: { type: 'bearer' } = { type: 'bearer' };
+  let testUser: UserEntity;
+
   const makeEmail = (afterRemove = true) => {
     const email = Math.random().toString(36).substring(2, 15) + '@myfreax.com';
     if (afterRemove) {
@@ -39,10 +41,8 @@ describe('UsersController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    useContainer(app, { fallbackOnErrors: true })
-    const jwt = app.get<JwtService>(JwtService);
-    token = jwt.sign({ email: 'web@myfreax.com', userId: 1, roleId: 1 });
-    prisma = app.get<PrismaService>(PrismaService);
+    useContainer(app.select(AppModule), { fallbackOnErrors: true });
+    
     app.useGlobalPipes(
       new ValidationPipe({
         transform: true,
@@ -52,6 +52,14 @@ describe('UsersController (e2e)', () => {
         },
       }),
     );
+
+
+    const jwt = app.get<JwtService>(JwtService);
+    token = jwt.sign({ email: 'web@myfreax.com', userId: 1, roleId: 1 },{expiresIn: '24h'});
+    prisma = app.get<PrismaService>(PrismaService);
+    testUser = await prisma.user.create({
+      data: makeUser(),
+    });
     await app.init();
   });
 
@@ -97,6 +105,7 @@ describe('UsersController (e2e)', () => {
       .catch((err) => {
         expect(err.error).toEqual('Bad Request');
         expect(err.message).toBeInstanceOf(Array);
+        
       });
   });
 
@@ -110,9 +119,10 @@ describe('UsersController (e2e)', () => {
       .expect('Content-Type', /json/)
       .send(user)
       .expect(400)
-      .catch((err) => {
-        expect(err.error).toEqual('Bad Request');
-        expect(err.message).toBeInstanceOf(Array);
+      .then(({body}) => {
+        expect(body.error).toEqual('Bad Request');
+        expect(body.message).toBeInstanceOf(Array);
+        expect(body.message.join()).toMatch(/password/)
       });
   });
   it('/api/users (POST) create user with error roleId', async () => {
@@ -125,9 +135,26 @@ describe('UsersController (e2e)', () => {
       .expect('Content-Type', /json/)
       .send(user)
       .expect(400)
-      .catch((err) => {
-        expect(err.error).toEqual('Bad Request');
-        expect(err.message).toBeInstanceOf(Array);
+      .then(({body}) => {
+        expect(body.error).toEqual('Bad Request');
+        expect(body.message).toBeInstanceOf(Array);
+        expect(body.message.join()).toMatch(/roleId/)
       });
+  });
+
+  it('/api/users (POST) create one is allreay exist user', async () => {
+    return request(app.getHttpServer())
+      .post(apiEndPoint)
+      .auth(token, bearer)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(testUser)
+      .expect(400)
+      .then(({body}) => {
+        expect(body.error).toEqual('Bad Request');
+        expect(body.message).toBeInstanceOf(Array);
+        expect(body.message.join()).toMatch(/email/)
+      })
+     
   });
 });

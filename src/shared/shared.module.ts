@@ -1,9 +1,9 @@
 import { PrismaService } from './prisma.service';
 import { Module } from '@nestjs/common';
-import { RoleIdIsExist } from './validators/roleIdIsExist';
+import { ValueIsExist } from './validators/valueIsExist';
 
 @Module({
-  providers: [PrismaService, RoleIdIsExist],
-  exports: [PrismaService, RoleIdIsExist],
+  providers: [PrismaService, ValueIsExist],
+  exports: [PrismaService, ValueIsExist],
 })
 export class SharedModule {}
