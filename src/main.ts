@@ -4,9 +4,11 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { TokenExpiredError } from './auth/dto/tokenExpiredError-dto';
 import { useContainer } from 'class-validator';
+import { NotFoundInterceptor } from './shared/interceptors/notFoundInterceptor';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  app.useGlobalInterceptors(new NotFoundInterceptor());
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
