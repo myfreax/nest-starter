@@ -23,7 +23,7 @@ jobs:
           --health-retries 5
     steps:
     - uses: actions/checkout@v2
-    - name: Generate coverage report
+    - name: yarn test:e2e
       run: |
         yarn install
         yarn db:forceReset
