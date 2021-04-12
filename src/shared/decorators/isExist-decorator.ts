@@ -1,20 +1,13 @@
-import { PrismaClient, User } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { ValidationOptions, Validate } from 'class-validator';
+import { Tables } from '../prisma.service';
 import { ValueIsExist } from '../validators/valueIsExist';
+
 type IsExistOption<T> = {
   /**
    * Specify in which table to find
    */
-  findInTable: Exclude<
-  keyof PrismaClient,
-  | '$connect'
-  | '$disconnect'
-  | '$use'
-  | '$on'
-  | '$queryRaw'
-  | '$executeRaw'
-  | '$transaction'
->;
+  findInTable: Tables;
   /**
    * by default opposite is false, The vilidate value is exist return true. Otherwise return false.
    * The vilidate value is exist return false When opposite is true.

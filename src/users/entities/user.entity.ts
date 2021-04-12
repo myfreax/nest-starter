@@ -17,6 +17,8 @@ export class UserEntity extends IdDto implements PropertyOption<User> {
   @ApiProperty({ example: 'web@myfreax.com' })
   @Type(() => String)
   @Expose()
+  @IsString()
+  @IsEmail()
   email?: string;
 
   @ApiProperty({
