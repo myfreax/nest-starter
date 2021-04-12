@@ -26,7 +26,6 @@ import { ParamsValidateFailDto } from '../shared/dto/paramsValidateFail-dto';
 import { NotFoundDto } from '../shared/dto/notFound-dto';
 import { Inject } from '@nestjs/common';
 import { PrismaService, Tables } from '../shared/prisma.service';
-import { CheckIdPipe } from '../shared/pipes/checkId.piple';
 export const CheckId = (table: string) => {
   const injectService = Inject(PrismaService);
   return (

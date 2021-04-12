@@ -11,18 +11,16 @@ import { tap } from 'rxjs/operators';
 @Injectable()
 export class NotFoundInterceptor implements NestInterceptor {
   private message: string;
-  constructor(message: string = '') {
+  constructor(message: string = 'Not Found') {
     this.message = message;
   }
   intercept(context: ExecutionContext, stream$: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest<Request>();
-    if (context.getType() === 'http' && request.method == 'get') {
+    if (context.getType() === 'http' && request.method == 'GET') {
       return stream$.handle().pipe(
         tap((data) => {
-          if (data === undefined || (data == null && this.message)) {
-            throw new NotFoundException(this.message);
-          } else {
-            throw new NotFoundException();
+          if (data === undefined || data == null) {
+            throw new NotFoundException(this.message) 
           }
         }),
       );
