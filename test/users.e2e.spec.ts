@@ -8,8 +8,9 @@ import { UserEntity } from '../src/users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { isEmail, useContainer } from 'class-validator';
 import { NotFoundInterceptor } from '../src/shared/interceptors/notFoundInterceptor';
-const apiEndPoint = '/api/users';
+
 describe('UsersController (e2e)', () => {
+  const apiEndPoint = '/api/users';
   let app: INestApplication;
   let prisma: PrismaService;
   const emails: string[] = [];
@@ -73,7 +74,6 @@ describe('UsersController (e2e)', () => {
     await Promise.all(
       emails.map((email) => prisma.user.delete({ where: { email } })),
     );
-    await prisma.onModuleDestroy();
     app.close();
   });
   it('/api/users (POST) create user without token', async () => {
@@ -225,6 +225,31 @@ describe('UsersController (e2e)', () => {
       .patch(`${apiEndPoint}/2147483627`)
       .auth(token, bearer)
       .send(user)
+      .set('Accept', 'application/json')
+      .expect(400)
+      .then((res) => {
+        expect(res.body.error).toEqual('Bad Request');
+        expect(res.body.message).toBeInstanceOf(Array);
+        expect(res.body.message.join()).toMatch(/id/);
+      });
+  });
+
+  it('/api/users (DELETE) delete user by id', async () => {
+    const user = await prisma.user.create({ data: makeUser(false) });
+    return request(server)
+      .delete(`${apiEndPoint}/${user.id}`)
+      .auth(token, bearer)
+      .set('Accept', 'application/json')
+      .expect(200)
+      .then((res) => {
+        expect(res.body.id).toEqual(user.id);
+      });
+  });
+
+  it('/api/users (DELETE) delete not exist user', async () => {
+    return request(server)
+      .delete(`${apiEndPoint}/2147483627`)
+      .auth(token, bearer)
       .set('Accept', 'application/json')
       .expect(400)
       .then((res) => {
