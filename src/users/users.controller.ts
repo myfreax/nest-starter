@@ -6,46 +6,22 @@ import {
   Patch,
   Param,
   Delete,
-  BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import {
   ApiBearerAuth,
-  ApiBody,
   ApiTags,
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { UserEntity } from './entities/user.entity';
+import { UserEntity, CheckIdDto } from './entities/user.entity';
 import { TokenExpiredError } from '../auth/dto/tokenExpiredError-dto';
-import { LoginedDto } from '../auth/dto/logined-dto';
-import { CheckIdDto, IdDto } from '../shared/dto/id-dto';
+import { IdDto } from '../shared/dto/id-dto';
 import { ParamsValidateFailDto } from '../shared/dto/paramsValidateFail-dto';
 import { NotFoundDto } from '../shared/dto/notFound-dto';
-import { Inject } from '@nestjs/common';
-import { PrismaService, Tables } from '../shared/prisma.service';
-export const CheckId = (table: string) => {
-  const injectService = Inject(PrismaService);
-  return (
-    target: any,
-    propertyKey: string,
-    descriptor: PropertyDescriptor,
-  ): PropertyDescriptor => {
-    const originalMethod = descriptor.value;
-    injectService(target, 'prisma');
-    descriptor.value = async function (...args) {
-      console.info(args);
-      const prisma: PrismaService = this.prisma;
-      const user = await prisma.user.findUnique({ where: { id: 1 } });
-      if (user) {
-        return originalMethod.apply(this, args);
-      }
-    };
-    return descriptor;
-  };
-};
+
 @ApiBearerAuth()
 @ApiTags('Users')
 @ApiResponse({
@@ -126,7 +102,7 @@ export class UsersController {
     description: 'remove user by id.',
   })
   @Delete(':id')
-  remove(@Param() idDto: IdDto) {
+  remove(@Param() idDto: CheckIdDto) {
     return this.usersService.remove({ id: idDto.id });
   }
 }

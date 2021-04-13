@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsString, Min } from 'class-validator';
-import { Type, Expose } from 'class-transformer';
+import { IsString } from 'class-validator';
+import { Expose } from 'class-transformer';
 
 export class ParamsValidateFailDto {
   @ApiProperty({ example: 'Bad Request' })
@@ -9,7 +9,7 @@ export class ParamsValidateFailDto {
   error: string;
 
   @ApiProperty({
-    example: ['email format error'],
+    example: ['email format error', '....more'],
     isArray: true,
   })
   @Expose()
