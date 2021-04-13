@@ -5,8 +5,9 @@ import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/shared/prisma.service';
 import { CreateUsersDto } from '../src/users/dto/create-users.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
-const apiEndPoint = '/api/auth/login';
+
 describe('AuthController (e2e)', () => {
+  const apiEndPoint = '/api/auth/login';
   let app: INestApplication;
   let prisma: PrismaService;
   let user: UserEntity;
