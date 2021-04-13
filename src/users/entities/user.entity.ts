@@ -1,6 +1,5 @@
-import { PrismaClient, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import {
-  ValidationOptions,
   IsString,
   MinLength,
   MaxLength,

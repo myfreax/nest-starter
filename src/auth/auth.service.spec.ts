@@ -11,9 +11,10 @@ import { PrismaService } from '../shared/prisma.service';
 
 describe('AuthService', () => {
   let service: AuthService;
+  let moduleRef: TestingModule;
 
-  beforeEach(async () => {
-    const moduleRef: TestingModule = await Test.createTestingModule({
+  beforeAll(async () => {
+    moduleRef = await Test.createTestingModule({
       imports: [
         SharedModule,
         UsersModule,
@@ -33,6 +34,10 @@ describe('AuthService', () => {
     }).compile();
 
     service = moduleRef.get<AuthService>(AuthService);
+  });
+
+  afterAll(() => {
+    moduleRef.close();
   });
 
   it('should be defined', () => {

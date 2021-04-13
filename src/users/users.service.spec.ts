@@ -8,19 +8,19 @@ import { UsersService } from './users.service';
 describe('UsersService', () => {
   let service: UsersService;
   let users: UserEntity[];
-  beforeEach(async () => {
+  let module: TestingModule;
+  beforeAll(async () => {
     users = [];
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [SharedModule],
       providers: [UsersService],
     }).compile();
-
     service = module.get<UsersService>(UsersService);
   });
 
-  afterEach(async () => {
-    // remove all created users
+  afterAll(async () => {
     await Promise.all(users.map((user) => service.remove({ id: user.id })));
+    module.close();
   });
 
   it('should be defined', () => {

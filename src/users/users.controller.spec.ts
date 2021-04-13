@@ -7,43 +7,48 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
 describe('UsersController', () => {
+  let module: TestingModule;
   let controller: UsersController;
   let users: UserEntity[];
-  beforeEach(async () => {
+  let createUser: (afterRemove?: boolean) => Promise<UserEntity>;
+
+  beforeAll(async () => {
     users = [];
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [SharedModule],
       controllers: [UsersController],
       providers: [UsersService],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
+    createUser = async (afterRemove = true) => {
+      const email =
+        Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15) +
+        `@${Math.random()
+          .toString(36)
+          .substring(2, 15)}.${Math.random().toString(36).substring(2, 15)}`;
+      const createUsersDto: CreateUsersDto = {
+        email,
+        password: 'randomPassword',
+        roleId: 1,
+      };
+      const user = await controller.create(createUsersDto);
+      if (afterRemove) {
+        users.push(user);
+      }
+      return user;
+    };
   });
-  afterEach(async () => {
+
+  afterAll(async () => {
     await Promise.all(users.map((user) => controller.remove({ id: user.id })));
+    module.close();
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
-  const createUser = async (afterRemove = true) => {
-    const email =
-      Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15) +
-      `@${Math.random().toString(36).substring(2, 15)}.${Math.random()
-        .toString(36)
-        .substring(2, 15)}`;
-    const createUsersDto: CreateUsersDto = {
-      email,
-      password: 'randomPassword',
-      roleId: 1,
-    };
-    const user = await controller.create(createUsersDto);
-    if (afterRemove) {
-      users.push(user);
-    }
-    return user;
-  };
 
   it('should create user and return it', async () => {
     const user = await createUser();

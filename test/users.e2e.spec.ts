@@ -37,7 +37,7 @@ describe('UsersController (e2e)', () => {
     };
   };
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -95,6 +95,7 @@ describe('UsersController (e2e)', () => {
         expect(body.email).toEqual(user.email);
       });
   });
+
   it('/api/users (POST) create user with error email format', async () => {
     const user = makeUser(false);
     user.email = user.email.replace('@', '');
@@ -127,8 +128,9 @@ describe('UsersController (e2e)', () => {
         expect(body.message.join()).toMatch(/password/);
       });
   });
+
   it('/api/users (POST) create user with not exist roleId', async () => {
-    const user = makeUser();
+    const user = makeUser(false);
     user.roleId = 2147483627;
     return request(server)
       .post(apiEndPoint)
@@ -218,7 +220,7 @@ describe('UsersController (e2e)', () => {
   });
 
   it('/api/users (PATCH) update not exist user', async () => {
-    const user = makeUser(false)
+    const user = makeUser(false);
     return request(server)
       .patch(`${apiEndPoint}/2147483627`)
       .auth(token, bearer)

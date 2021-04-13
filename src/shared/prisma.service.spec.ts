@@ -3,16 +3,16 @@ import { PrismaService } from './prisma.service';
 
 describe('PrismaService', () => {
   let service: PrismaService;
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+  let module: TestingModule;
+  beforeAll(async () => {
+    module = await Test.createTestingModule({
       providers: [PrismaService],
     }).compile();
 
     service = module.get<PrismaService>(PrismaService);
   });
-  afterEach(async () => {
-    service.onModuleDestroy();
+  afterAll(async () => {
+    module.close();
   });
 
   it('prisma.service should be defined', () => {

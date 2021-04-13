@@ -10,11 +10,10 @@ describe('AuthController (e2e)', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let user: UserEntity;
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
-
     app = moduleFixture.createNestApplication();
     prisma = app.get<PrismaService>(PrismaService);
     try {
@@ -37,7 +36,6 @@ describe('AuthController (e2e)', () => {
     if (user.email == 'web@myfreax.com') {
       await prisma.user.delete({ where: { id: user.id } });
     }
-    await prisma.onModuleDestroy();
     app.close();
   });
 
@@ -50,10 +48,11 @@ describe('AuthController (e2e)', () => {
       });
   });
 
-  it('/api/auth/login (POST) with invalid user', () => {
+  it('/api/auth/login (POST) with invalid user', (done) => {
     return request(app.getHttpServer())
       .post(apiEndPoint)
       .send({ username: 'xx', password: 'xxx' })
-      .expect(401);
+      .expect(401)
+      .end(done);
   });
 });
