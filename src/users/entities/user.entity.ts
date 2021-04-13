@@ -1,23 +1,22 @@
 import { User } from '@prisma/client';
-import {
-  IsString,
-  MinLength,
-  MaxLength,
-  IsEmail,
-  Min,
-  IsInt,
-} from 'class-validator';
+import { IsString, MinLength, MaxLength, IsEmail } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { IdDto } from '../../shared/dto/id-dto';
+import { IdDto, ID } from '../../shared/dto/id-dto';
 import { IsExist } from '../../shared/decorators/isExist-decorator';
 import { RoleEntity } from '../../roles/entities/role.entity';
+import { applyDecorators } from '@nestjs/common';
+export function Email() {
+  return applyDecorators(
+    ApiProperty({ example: 'web myfreax.com' }),
+    Type(() => String),
+    Expose(),
+    IsString(),
+    IsEmail(),
+  );
+}
 export class UserEntity extends IdDto implements PropertyOption<User> {
-  @ApiProperty({ example: 'web@myfreax.com' })
-  @Type(() => String)
-  @Expose()
-  @IsString()
-  @IsEmail()
+  @Email()
   email?: string;
 
   @ApiProperty({
@@ -29,13 +28,15 @@ export class UserEntity extends IdDto implements PropertyOption<User> {
   @Expose()
   password?: string;
 
-  @ApiProperty({ example: 1 })
-  @Type(() => Number)
-  @Expose()
-  @Min(1)
-  @IsInt()
+  @ID()
   @IsExist<RoleEntity>({ findInTable: 'role', mapUniqueFieldName: 'id' })
   roleId?: number;
+}
+
+export class CheckIdDto extends IdDto {
+  @ID()
+  @IsExist({ findInTable: 'user' })
+  id: number;
 }
 
 export class UniqueField extends IdDto implements PropertyOption<User> {
