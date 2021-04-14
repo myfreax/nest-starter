@@ -10,37 +10,13 @@ import {
 import { UsersService } from './users.service';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
-import {
-  ApiBearerAuth,
-  ApiTags,
-  ApiResponse,
-  getSchemaPath,
-} from '@nestjs/swagger';
+import { ApiResponse } from '@nestjs/swagger';
 import { UserEntity, CheckIdDto } from './entities/user.entity';
-import { TokenExpiredError } from '../auth/dto/tokenExpiredError-dto';
 import { IdDto } from '../shared/dto/id-dto';
-import { ParamsValidateFailDto } from '../shared/dto/paramsValidateFail-dto';
-import { NotFoundDto } from '../shared/dto/notFound-dto';
+import { ControllerDecorator } from '../shared/decorators/controller-decorator';
+import { FindDecorator } from '../shared/decorators/find-decorator';
 
-@ApiBearerAuth()
-@ApiTags('Users')
-@ApiResponse({
-  status: 401,
-  description: 'Unauthorized OR token expired',
-  content: {
-    TokenExpiredError: {
-      schema: {
-        $ref: getSchemaPath(TokenExpiredError),
-      },
-    },
-    UnauthorizedError: {},
-  },
-})
-@ApiResponse({
-  status: 400,
-  description: 'params validate fail',
-  type: () => ParamsValidateFailDto,
-})
+@ControllerDecorator('users')
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -51,38 +27,23 @@ export class UsersController {
     description: 'Created User.',
   })
   @Post()
-  create(@Body() createUsersDto: CreateUsersDto) {
+  create(@Body() createUsersDto: CreateUsersDto): Promise<UserEntity> {
     return this.usersService.create(createUsersDto);
   }
 
-  @ApiResponse({
-    status: 200,
+  @FindDecorator({
+    description: 'find user by id',
     type: () => UserEntity,
     isArray: true,
-    description: 'find All user.',
-  })
-  @ApiResponse({
-    status: 404,
-    type: () => NotFoundDto,
-    description: 'find all user.',
   })
   @Get()
-  findAll() {
+  findAll(): Promise<UserEntity[]> {
     return this.usersService.findAll();
   }
 
-  @ApiResponse({
-    status: 200,
-    type: () => UserEntity,
-    description: 'find one user by id.',
-  })
-  @ApiResponse({
-    status: 404,
-    type: () => NotFoundDto,
-    description: 'find one user by id.',
-  })
+  @FindDecorator({ description: 'find user by id', type: () => UserEntity })
   @Get(':id')
-  findOne(@Param() idDto: IdDto) {
+  findOne(@Param() idDto: IdDto): Promise<UserEntity> {
     return this.usersService.findOne({ id: idDto.id });
   }
 
@@ -92,7 +53,10 @@ export class UsersController {
     description: 'update user by id.',
   })
   @Patch(':id')
-  update(@Param() idDto: CheckIdDto, @Body() updateUsersDto: UpdateUsersDto) {
+  update(
+    @Param() idDto: CheckIdDto,
+    @Body() updateUsersDto: UpdateUsersDto,
+  ): Promise<UserEntity> {
     return this.usersService.update({ id: idDto.id }, updateUsersDto);
   }
 
@@ -102,7 +66,7 @@ export class UsersController {
     description: 'remove user by id.',
   })
   @Delete(':id')
-  remove(@Param() idDto: CheckIdDto) {
+  remove(@Param() idDto: CheckIdDto): Promise<UserEntity> {
     return this.usersService.remove({ id: idDto.id });
   }
 }

@@ -3,7 +3,7 @@ import { IsInt, IsString, Min } from 'class-validator';
 import { Type, Expose } from 'class-transformer';
 
 export class NotFoundDto {
-  @ApiProperty({ example: 'Bad Request' })
+  @ApiProperty({ example: 404 })
   @IsInt()
   @Expose()
   readonly statusCode: 404;
