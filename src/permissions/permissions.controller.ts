@@ -10,39 +10,45 @@ import {
 import { PermissionsService } from './permissions.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { PermissionEntity, CheckIdDto } from './entities/permission.entity';
+import { IdDto } from '../shared/dto/id-dto';
+import { ControllerDecorator } from '../shared/decorators/controller-decorator';
 
-@ApiBearerAuth()
-@ApiTags('Permissions')
+@ControllerDecorator('Permissions')
 @Controller()
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 
   @Post()
-  create(@Body() createPermissionDto: CreatePermissionDto) {
+  create(
+    @Body() createPermissionDto: CreatePermissionDto,
+  ): Promise<PermissionEntity> {
     return this.permissionsService.create(createPermissionDto);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<PermissionEntity[]> {
     return this.permissionsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.permissionsService.findOne(+id);
+  findOne(@Param() idDto: IdDto): Promise<PermissionEntity> {
+    return this.permissionsService.findOne({ id: idDto.id });
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param() idDto: CheckIdDto,
     @Body() updatePermissionDto: UpdatePermissionDto,
-  ) {
-    return this.permissionsService.update(+id, updatePermissionDto);
+  ): Promise<PermissionEntity> {
+    return this.permissionsService.update(
+      { id: idDto.id },
+      updatePermissionDto,
+    );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.permissionsService.remove(+id);
+  remove(@Param() idDto: CheckIdDto): Promise<PermissionEntity> {
+    return this.permissionsService.remove({ id: idDto.id });
   }
 }
