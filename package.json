@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "ts-node": "ts-node --compiler-options '{\"module\":\"CommonJS\"}'",
-    "db:seed":"yarn ts-node prisma/seeds.ts",
+    "db:seed": "yarn ts-node prisma/seeds.ts",
     "db:studio": "prisma studio",
     "db:deploy": "NODE_ENV=production dotenv-flow -- yarn prisma migrate deploy --preview-feature",
     "db:migrate": "dotenv-flow -- yarn prisma migrate dev --preview-feature",
@@ -28,6 +28,20 @@
     "test:coveralls": "jest --coverage && coveralls < coverage/lcov.info",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --detectOpenHandles  --config jest.json"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "yarn lint",
+      "yarn format",
+      "yarn test",
+      "yarn test:e2e"
+    ]
   },
   "dependencies": {
     "@nestjs/common": "^7.6.13",
@@ -52,6 +66,8 @@
     "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
+    "@commitlint/cli": "^12.1.1",
+    "@commitlint/config-conventional": "^12.1.1",
     "@nestjs/cli": "^7.5.6",
     "@nestjs/schematics": "^7.2.7",
     "@nestjs/testing": "^7.6.15",
@@ -67,6 +83,7 @@
     "eslint": "^7.20.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
+    "husky": "^6.0.0",
     "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "supertest": "^6.1.3",
