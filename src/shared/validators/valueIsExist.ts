@@ -34,8 +34,8 @@ export class ValueIsExist implements ValidatorConstraintInterface {
    * @returns Promise<boolean>
    */
   async validate(value: any, args: ValidationArguments): Promise<boolean> {
-    let options: Options = args.constraints[0];
-    let bool = Boolean(
+    const options: Options = args.constraints[0];
+    const bool = Boolean(
       await this.prisma[options.findInTable].findUnique({
         where: { [options.mapUniqueFieldName || args.property]: value },
       }),
@@ -47,7 +47,7 @@ export class ValueIsExist implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    let options: Options = args.constraints[0];
+    const options: Options = args.constraints[0];
     return `${args.property} ${args.value} is ${
       options.opposite ? 'already' : 'not'
     } exist`;

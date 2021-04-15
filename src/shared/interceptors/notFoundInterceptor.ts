@@ -11,7 +11,7 @@ import { tap } from 'rxjs/operators';
 @Injectable()
 export class NotFoundInterceptor implements NestInterceptor {
   private message: string;
-  constructor(message: string = 'Not Found') {
+  constructor(message = 'Not Found') {
     this.message = message;
   }
   intercept(context: ExecutionContext, stream$: CallHandler): Observable<any> {
@@ -20,7 +20,7 @@ export class NotFoundInterceptor implements NestInterceptor {
       return stream$.handle().pipe(
         tap((data) => {
           if (data === undefined || data == null) {
-            throw new NotFoundException(this.message) 
+            throw new NotFoundException(this.message);
           }
         }),
       );

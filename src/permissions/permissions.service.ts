@@ -1,4 +1,3 @@
-import { prisma } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../shared/prisma.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
@@ -8,9 +7,7 @@ import { PermissionEntity, UniqueField } from './entities/permission.entity';
 @Injectable()
 export class PermissionsService {
   constructor(private prisma: PrismaService) {}
-  create(
-    createPermissionDto: CreatePermissionDto,
-  ): Promise<PermissionEntity> {
+  create(createPermissionDto: CreatePermissionDto): Promise<PermissionEntity> {
     return this.prisma.permission.create({ data: createPermissionDto });
   }
 

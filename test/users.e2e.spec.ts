@@ -1,110 +1,74 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { AppModule } from '../src/app.module';
-import { PrismaService } from '../src/shared/prisma.service';
+import { INestApplication } from '@nestjs/common';
 import { CreateUsersDto } from '../src/users/dto/create-users.dto';
 import * as request from 'supertest';
 import { UserEntity } from '../src/users/entities/user.entity';
-import { JwtService } from '@nestjs/jwt';
-import { isEmail, useContainer } from 'class-validator';
-import { NotFoundInterceptor } from '../src/shared/interceptors/notFoundInterceptor';
+import { createApp, createToken, createUser, delUser } from './fixtures/app';
 
 describe('UsersController (e2e)', () => {
   const apiEndPoint = '/api/users';
   let app: INestApplication;
-  let prisma: PrismaService;
-  const emails: string[] = [];
   let token: string;
   let server: any;
+  let user: UserEntity;
   const bearer: { type: 'bearer' } = { type: 'bearer' };
-  let testUser: UserEntity;
-
-  const makeEmail = (afterRemove = true) => {
-    const email = Math.random().toString(36).substring(2, 15) + '@myfreax.com';
-    if (afterRemove) {
-      emails.push(email);
-    }
-    if (!isEmail(email)) {
-      makeEmail(afterRemove);
-    } else {
-      return email;
-    }
+  const makeEmail: () => string = () => {
+    return Math.random().toString(36).substring(2, 15) + '@myfreax.com';
   };
-  const makeUser = (afterRemove = true): CreateUsersDto => {
+  const makeUser = (): CreateUsersDto => {
     return {
-      email: makeEmail(afterRemove),
+      email: makeEmail(),
       password: 'myfreax.com',
       roleId: 1,
     };
   };
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app.useGlobalInterceptors(new NotFoundInterceptor());
-    useContainer(app.select(AppModule), { fallbackOnErrors: true });
-
-    app.useGlobalPipes(
-      new ValidationPipe({
-        transform: true,
-        transformOptions: {
-          strategy: 'exposeAll',
-          excludeExtraneousValues: true,
-        },
-      }),
-    );
-
-    const jwt = app.get<JwtService>(JwtService);
-    token = jwt.sign(
-      { email: 'web@myfreax.com', userId: 1, roleId: 1 },
-      { expiresIn: '24h' },
-    );
-    prisma = app.get<PrismaService>(PrismaService);
-    testUser = await prisma.user.create({
-      data: makeUser(),
-    });
-    await app.init();
+    app = await createApp();
     server = app.getHttpServer();
+    token = await createToken(app);
+  });
+
+  beforeEach(async () => {
+    user = null;
+  });
+
+  afterEach(async () => {
+    if (user) {
+      await delUser(app, user);
+    }
   });
 
   afterAll(async () => {
-    await Promise.all(
-      emails.map((email) => prisma.user.delete({ where: { email } })),
-    );
     app.close();
   });
   it('/api/users (POST) create user without token', async () => {
-    const user = makeUser(false);
-    return request(server).post(apiEndPoint).send(user).expect(401);
+    return request(server).post(apiEndPoint).send(makeUser()).expect(401);
   });
 
   it('/api/users (POST) create user', async () => {
-    const user = makeUser();
     return request(server)
       .post(apiEndPoint)
       .auth(token, bearer)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .send(user)
+      .send(makeUser())
       .expect(201)
       .then(({ body }) => {
+        user = body;
         expect(body).toHaveProperty('id');
         expect(body.email).toEqual(user.email);
       });
   });
 
   it('/api/users (POST) create user with error email format', async () => {
-    const user = makeUser(false);
-    user.email = user.email.replace('@', '');
+    const createUsersDto = makeUser();
+    createUsersDto.email = createUsersDto.email.replace('@', '');
     return request(server)
       .post(apiEndPoint)
       .auth(token, bearer)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .send(user)
+      .send(createUsersDto)
       .expect(400)
       .catch((err) => {
         expect(err.error).toEqual('Bad Request');
@@ -113,14 +77,14 @@ describe('UsersController (e2e)', () => {
   });
 
   it('/api/users (POST) create user without password', async () => {
-    const user = makeUser(false);
-    user.password = '';
+    const createUsersDto = makeUser();
+    createUsersDto.password = '';
     return request(server)
       .post(apiEndPoint)
       .auth(token, bearer)
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .send(user)
+      .send(createUsersDto)
       .expect(400)
       .then(({ body }) => {
         expect(body.error).toEqual('Bad Request');
@@ -130,8 +94,24 @@ describe('UsersController (e2e)', () => {
   });
 
   it('/api/users (POST) create user with not exist roleId', async () => {
-    const user = makeUser(false);
-    user.roleId = 2147483627;
+    const createUsersDto = makeUser();
+    createUsersDto.roleId = 2147483627;
+    return request(server)
+      .post(apiEndPoint)
+      .auth(token, bearer)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(createUsersDto)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.error).toEqual('Bad Request');
+        expect(body.message).toBeInstanceOf(Array);
+        expect(body.message.join()).toMatch(/roleId/);
+      });
+  });
+
+  it('/api/users (POST) create one is allreay exist user', async () => {
+    user = await createUser(app);
     return request(server)
       .post(apiEndPoint)
       .auth(token, bearer)
@@ -142,27 +122,12 @@ describe('UsersController (e2e)', () => {
       .then(({ body }) => {
         expect(body.error).toEqual('Bad Request');
         expect(body.message).toBeInstanceOf(Array);
-        expect(body.message.join()).toMatch(/roleId/);
-      });
-  });
-
-  it('/api/users (POST) create one is allreay exist user', async () => {
-    return request(server)
-      .post(apiEndPoint)
-      .auth(token, bearer)
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send(testUser)
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.error).toEqual('Bad Request');
-        expect(body.message).toBeInstanceOf(Array);
         expect(body.message.join()).toMatch(/email/);
       });
   });
 
   it('/api/users (GET) find one user', async () => {
-    const user = await prisma.user.create({ data: makeUser() });
+    user = await createUser(app);
     return request(server)
       .get(`${apiEndPoint}/${user.id}`)
       .auth(token, bearer)
@@ -187,7 +152,7 @@ describe('UsersController (e2e)', () => {
   });
 
   it('/api/users (PATCH) update user', async () => {
-    const user = await prisma.user.create({ data: makeUser(false) });
+    user = await createUser(app);
     user.password = 'myfreax.com';
     user.email = makeEmail();
     return request(server)
@@ -204,7 +169,7 @@ describe('UsersController (e2e)', () => {
   });
 
   it('/api/users (PATCH) update user with not exist roleId', async () => {
-    const user = await prisma.user.create({ data: makeUser() });
+    user = await createUser(app);
     user.roleId = 2147483627;
     return request(server)
       .patch(`${apiEndPoint}/${user.id}`)
@@ -220,11 +185,10 @@ describe('UsersController (e2e)', () => {
   });
 
   it('/api/users (PATCH) update not exist user', async () => {
-    const user = makeUser(false);
     return request(server)
       .patch(`${apiEndPoint}/2147483627`)
       .auth(token, bearer)
-      .send(user)
+      .send(makeUser())
       .set('Accept', 'application/json')
       .expect(400)
       .then((res) => {
@@ -235,7 +199,7 @@ describe('UsersController (e2e)', () => {
   });
 
   it('/api/users (DELETE) delete user by id', async () => {
-    const user = await prisma.user.create({ data: makeUser(false) });
+    user = await createUser(app);
     return request(server)
       .delete(`${apiEndPoint}/${user.id}`)
       .auth(token, bearer)
@@ -243,6 +207,7 @@ describe('UsersController (e2e)', () => {
       .expect(200)
       .then((res) => {
         expect(res.body.id).toEqual(user.id);
+        user = undefined;
       });
   });
 

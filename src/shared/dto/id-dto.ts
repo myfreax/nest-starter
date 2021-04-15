@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, Min } from 'class-validator';
 import { Type, Expose } from 'class-transformer';
 import { applyDecorators } from '@nestjs/common';
-export function ID( ) {
+export function ID() {
   return applyDecorators(
     ApiProperty({
       example: 1,

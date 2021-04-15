@@ -1,5 +1,5 @@
 import { Permission, PermissionAction } from '.prisma/client';
-import { IsString, IsInt } from 'class-validator';
+import { IsString } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { ID, IdDto } from '../../shared/dto/id-dto';
@@ -44,4 +44,6 @@ export class CheckIdDto extends IdDto {
   id: number;
 }
 
-export class UniqueField extends IdDto implements PropertyOption<PermissionEntity> {}
+export class UniqueField
+  extends IdDto
+  implements PropertyOption<PermissionEntity> {}

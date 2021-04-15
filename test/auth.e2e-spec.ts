@@ -1,47 +1,26 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../src/app.module';
-import { PrismaService } from '../src/shared/prisma.service';
-import { CreateUsersDto } from '../src/users/dto/create-users.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
+import { createApp, createUser, delUser } from './fixtures/app';
 
 describe('AuthController (e2e)', () => {
   const apiEndPoint = '/api/auth/login';
   let app: INestApplication;
-  let prisma: PrismaService;
   let user: UserEntity;
+  let server: any;
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-    app = moduleFixture.createNestApplication();
-    prisma = app.get<PrismaService>(PrismaService);
-    try {
-      user = await prisma.user.findFirst();
-      if (!user) {
-        const data: CreateUsersDto = {
-          email: 'web@myfreax.com',
-          roleId: 1,
-          password: 'myfreax',
-        };
-        user = await prisma.user.create({
-          data,
-        });
-      }
-    } catch (_) {}
-    await app.init();
+    app = await createApp();
+    server = app.getHttpServer();
+    user = await createUser(app);
   });
 
   afterAll(async () => {
-    if (user.email == 'web@myfreax.com') {
-      await prisma.user.delete({ where: { id: user.id } });
-    }
+    await delUser(app, user);
     app.close();
   });
 
   it(`/api/auth/login (POST)`, () => {
-    return request(app.getHttpServer())
+    return request(server)
       .post(apiEndPoint)
       .send({ email: user.email, password: user.password })
       .then((res) => {
@@ -50,7 +29,7 @@ describe('AuthController (e2e)', () => {
   });
 
   it('/api/auth/login (POST) with invalid user', (done) => {
-    return request(app.getHttpServer())
+    return request(server)
       .post(apiEndPoint)
       .send({ username: 'xx', password: 'xxx' })
       .expect(401)

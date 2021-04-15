@@ -3,5 +3,4 @@ import { OmitType } from '@nestjs/swagger';
 
 export class CreatePermissionDto extends OmitType(PermissionEntity, [
   'id',
-] as const) {
-}
+] as const) {}

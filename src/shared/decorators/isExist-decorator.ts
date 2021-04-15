@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import { ValidationOptions, Validate } from 'class-validator';
 import { Tables } from '../prisma.service';
 import { ValueIsExist } from '../validators/valueIsExist';
