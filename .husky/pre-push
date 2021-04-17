@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx test:e2e
-npx test
+npm run test:e2e
+npm run test
