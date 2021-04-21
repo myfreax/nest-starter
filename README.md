@@ -16,15 +16,17 @@ Quickly start nest.js project for you
   - Authorization(Attribute-Based Access Control)
   - Databases support(SQLite,MySQL,PostgreSQL power by Prisma)
 
+## Status
+In development
+
 ## Installation
 
 
 ```bash
-$ docker run -itd -p 5432:5432 --user 1000:1000 -e POSTGRES_PASSWORD=randompassword -v `pwd`/postgres/:/var/lib/postgresql/data --name postgres  postgres
+$ docker run -itd -p 5432:5432 -e POSTGRES_PASSWORD=randompassword --name postgres  postgres
 $ yarn install
-$ yarn db:reset
 $ yarn db:migrate
-$ yarn db:generate
+$ yarn db:seed
 ```
 
 ## Running the app
