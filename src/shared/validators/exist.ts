@@ -19,7 +19,7 @@ type Options = {
    * You need specify field name when decorate field not exist in table
    * example: roleId is require when you create user. But role table is not field roleId
    */
-  uniqueFieldName: string;
+  field: string;
 
   /**
    * by default opposite is false, The vilidate value is exist return true. Otherwise return false.
@@ -42,7 +42,7 @@ export class ValueIsExist implements ValidatorConstraintInterface {
     const options: Options = args.constraints[0];
     const bool = Boolean(
       await this.prisma[options.table.toString()].findUnique({
-        where: { [options.uniqueFieldName || args.property]: value },
+        where: { [options.field || args.property]: value },
       }),
     );
     if (options.opposite) {
