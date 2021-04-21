@@ -2,13 +2,13 @@ import { User } from '@prisma/client';
 import { IsString, MinLength, MaxLength, IsEmail } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { IdDto, ID } from '../../shared/dto/id-dto';
-import { IsExist } from '../../shared/decorators/isExist-decorator';
+import { IdDto, ID } from '../../shared/dto/id.dto';
+import { IsExist } from '../../shared/validators/exist';
 import { RoleEntity } from '../../roles/entities/role.entity';
 import { applyDecorators } from '@nestjs/common';
 export function Email() {
   return applyDecorators(
-    ApiProperty({ example: 'web myfreax.com' }),
+    ApiProperty({ example: 'web@myfreax.com' }),
     Type(() => String),
     Expose(),
     IsString(),
@@ -29,13 +29,13 @@ export class UserEntity extends IdDto implements PropertyOption<User> {
   password?: string;
 
   @ID()
-  @IsExist<RoleEntity>({ findInTable: 'role', mapUniqueFieldName: 'id' })
+  @IsExist<RoleEntity>({ table: 'role', field: 'id' })
   roleId?: number;
 }
 
 export class CheckIdDto extends IdDto {
   @ID()
-  @IsExist({ findInTable: 'user' })
+  @IsExist({ table: 'user' })
   id: number;
 }
 

@@ -1,10 +1,10 @@
 import { JwtService } from '@nestjs/jwt';
 import { TestingModule, Test } from '@nestjs/testing';
 import { useContainer } from 'class-validator';
-import { NotFoundInterceptor } from '../../src/shared/interceptors/notFoundInterceptor';
+import { NotFoundInterceptor } from '../../src/shared/interceptors/not-found.Interceptor';
 import { AppModule } from '../../src/app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { CreateUsersDto } from 'src/users/dto/create-users.dto';
+import { CreateUsersDto } from '../../src/users/dto/create-users.dto';
 import { UserEntity } from '../../src/users/entities/user.entity';
 import { PrismaService } from '../../src/shared/prisma.service';
 

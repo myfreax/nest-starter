@@ -1,4 +1,7 @@
-import { applyDecorators } from '@nestjs/common';
+import {
+  applyDecorators,
+  Controller as CommonController,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiResponse,
@@ -6,9 +9,9 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { TokenExpiredError } from '../../auth/dto/tokenExpiredError-dto';
-import { ParamsValidateFailDto } from '../dto/paramsValidateFail-dto';
+import { ParamsValidateFailDto } from '../dto/params-validate-fail.dto';
 
-export function ControllerDecorator(controllerName: string) {
+export function Controller(controllerName: string) {
   return applyDecorators(
     ApiBearerAuth(),
     ApiTags(controllerName),
@@ -29,5 +32,6 @@ export function ControllerDecorator(controllerName: string) {
       description: 'params validate fail',
       type: () => ParamsValidateFailDto,
     }),
+    CommonController(),
   );
 }

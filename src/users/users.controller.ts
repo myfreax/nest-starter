@@ -1,23 +1,14 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import { UserEntity, CheckIdDto } from './entities/user.entity';
-import { IdDto } from '../shared/dto/id-dto';
-import { ControllerDecorator } from '../shared/decorators/controller-decorator';
-import { FindDecorator } from '../shared/decorators/find-decorator';
+import { IdDto } from '../shared/dto/id.dto';
+import { Controller } from '../shared/decorators/controller';
+import { Find } from '../shared/decorators/find';
 
-@ControllerDecorator('users')
-@Controller()
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -31,7 +22,7 @@ export class UsersController {
     return this.usersService.create(createUsersDto);
   }
 
-  @FindDecorator({
+  @Find({
     description: 'find user by id',
     type: () => UserEntity,
     isArray: true,
@@ -41,7 +32,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @FindDecorator({ description: 'find user by id', type: () => UserEntity })
+  @Find({ description: 'find user by id', type: () => UserEntity })
   @Get(':id')
   findOne(@Param() idDto: IdDto): Promise<UserEntity> {
     return this.usersService.findOne({ id: idDto.id });

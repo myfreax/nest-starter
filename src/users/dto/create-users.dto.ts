@@ -1,13 +1,13 @@
 import { UserEntity, Email } from '../entities/user.entity';
 import { OmitType } from '@nestjs/swagger';
-import { IsExist } from '../../shared/decorators/isExist-decorator';
+import { IsNotExist } from '../../shared/validators/exist';
 
 export class CreateUsersDto extends OmitType(UserEntity, ['id'] as const) {
   /**
    * create user when user is not exist
    */
   @Email()
-  @IsExist({ findInTable: 'user', opposite: true })
+  @IsNotExist({ table: 'user' })
   email: string;
 
   password: string;

@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiResponse, ApiResponseMetadata } from '@nestjs/swagger';
-import { NotFoundDto } from '../dto/notFound-dto';
-export function FindDecorator(options: Omit<ApiResponseMetadata, 'status'>) {
+import { NotFoundDto } from '../dto/not-found.dto';
+export function Find(options: Omit<ApiResponseMetadata, 'status'>) {
   return applyDecorators(
     ApiResponse({
       status: 200,

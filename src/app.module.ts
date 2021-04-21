@@ -4,7 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { AntdResultMiddleware } from './middlewares/antd-result.middleware';
+import { AntdResultMiddleware } from './shared/middlewares/antd-result.middleware';
 import { UsersModule } from './users/users.module';
 import { ApiModule } from './api/api.module';
 import { routes } from './routes';

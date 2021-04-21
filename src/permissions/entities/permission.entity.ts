@@ -1,17 +1,23 @@
-import { Permission, PermissionAction } from '.prisma/client';
+import { Permission, PermissionAction } from '@prisma/client';
 import { IsString } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { ID, IdDto } from '../../shared/dto/id-dto';
-import { IsExist } from '../../shared/decorators/isExist-decorator';
-export enum Action {
-  CreateAny = 'create:any',
-  ReacdAny = 'read:any',
-  UpdateAny = 'update:any',
-  DeleteAny = 'delete:any',
-  DeleteOwn = 'delete:own',
-  UpdateOwn = 'update:own',
-}
+import { ID, IdDto } from '../../shared/dto/id.dto';
+import { IsExist } from '../../shared/validators/exist';
+import { createEnum } from '../../shared/operator/create-enum';
+
+// TODO: this Action only read, But now you can overwrite action perproty, fix it.
+export const Action = createEnum<typeof PermissionAction>({
+  update_any: 'update:any',
+  delete_any: 'delete:any',
+  create_any: 'create:any',
+  read_any: 'read:any',
+  update_own: 'update:own',
+  delete_own: 'delete:own',
+  create_own: 'create:own',
+  read_own: 'read:own',
+});
+
 export class PermissionEntity extends IdDto implements Permission {
   @ApiProperty({
     example: 'user',
@@ -40,7 +46,7 @@ export class PermissionEntity extends IdDto implements Permission {
 
 export class CheckIdDto extends IdDto {
   @ID()
-  @IsExist({ findInTable: 'permission' })
+  @IsExist({ table: 'permission' })
   id: number;
 }
 
