@@ -10,6 +10,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/jest/bin/jest",
       "args": [
+        "--testTimeout",
+        "600",
         "--runInBand",
         "--config",
         "jest.json"

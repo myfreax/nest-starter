@@ -26,7 +26,6 @@ jobs:
     - name: yarn test:e2e
       run: |
         yarn install
-        yarn db:forceReset
         yarn db:migrate
-        yarn db:generate
+        yarn db:seed
         yarn test:e2e

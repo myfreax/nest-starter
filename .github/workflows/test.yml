@@ -26,9 +26,8 @@ jobs:
     - name: Generate coverage report
       run: |
         yarn install
-        yarn db:forceReset
         yarn db:migrate
-        yarn db:generate
+        yarn db:seed
         yarn test:cov
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
