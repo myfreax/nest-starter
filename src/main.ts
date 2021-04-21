@@ -2,7 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { TokenExpiredError } from './auth/dto/tokenExpiredError-dto';
+import { TokenExpired } from './auth/dto/token-expired-dto';
 import { useContainer } from 'class-validator';
 import { NotFoundInterceptor } from './shared/interceptors/not-found.Interceptor';
 async function bootstrap() {
@@ -26,7 +26,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config, {
-    extraModels: [TokenExpiredError],
+    extraModels: [TokenExpired],
   });
   SwaggerModule.setup('swagger', app, document);
   app.enableShutdownHooks();

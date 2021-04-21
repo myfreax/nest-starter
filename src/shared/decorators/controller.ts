@@ -8,7 +8,7 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { TokenExpiredError } from '../../auth/dto/tokenExpiredError-dto';
+import { TokenExpired } from '../../auth/dto/token-expired-dto';
 import { ParamsValidateFailDto } from '../dto/params-validate-fail.dto';
 
 export function Controller(controllerName: string) {
@@ -19,9 +19,9 @@ export function Controller(controllerName: string) {
       status: 401,
       description: 'Unauthorized OR token expired',
       content: {
-        TokenExpiredError: {
+        TokenExpired: {
           schema: {
-            $ref: getSchemaPath(TokenExpiredError),
+            $ref: getSchemaPath(TokenExpired),
           },
         },
         UnauthorizedError: {},

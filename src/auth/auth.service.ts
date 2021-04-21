@@ -17,8 +17,8 @@ export class AuthService {
   ): Promise<Omit<UserEntity, 'password'> | null> {
     const user = await this.usersService.findOne({ email });
     if (user && user.password === pass) {
-      delete user.password;
-      return user;
+      const { password, ...result } = user;
+      return result;
     }
     return null;
   }
