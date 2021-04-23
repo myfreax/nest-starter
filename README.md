@@ -1,5 +1,5 @@
-
 # nest-starter
+
 Quickly start nest.js project for you
 
 <p>
@@ -10,17 +10,22 @@ Quickly start nest.js project for you
 </p>
 
 ## Feature
-  - Auto validate with class-validator
-  - Adheres OpenAPI specification by swagger
-  - Authentication(JWT,Local)
-  - Authorization(Attribute-Based Access Control)
-  - Databases support(SQLite,MySQL,PostgreSQL power by Prisma)
+
+- Auto validate with class-validator
+- Adheres OpenAPI specification by swagger
+- Authentication(JWT,Local)
+- Authorization(Attribute-Based Access Control)
+- Databases support(SQLite,MySQL,PostgreSQL power by Prisma)
 
 ## Status
+
 In development
 
-## Installation
+## Roadmap
 
+Check out we [Roadmap](https://github.com/huangyanxiong01/nest-starter/projects/1)
+
+## Installation
 
 ```bash
 $ docker run -itd -p 5432:5432 -e POSTGRES_PASSWORD=randompassword --name postgres  postgres
