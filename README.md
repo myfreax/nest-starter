@@ -30,8 +30,8 @@ Check out we [Roadmap](https://github.com/huangyanxiong01/nest-starter/projects/
 ```bash
 $ docker run -itd -p 5432:5432 -e POSTGRES_PASSWORD=randompassword --name postgres  postgres
 $ yarn install
-$ yarn dev:migrate
-$ yarn dev:seed
+$ yarn db:migrate
+$ yarn db:seed
 ```
 
 ## Running the app

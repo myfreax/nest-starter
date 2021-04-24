@@ -1,4 +1,4 @@
-on: ["push", "pull_request"]
+on: ['push', 'pull_request']
 
 name: test
 
@@ -9,7 +9,7 @@ jobs:
     container: node:14
     services:
       # Label used to access the service container
-       postgres:
+      postgres:
         # Docker Hub image
         image: postgres
         # Provide the password for postgres
@@ -22,19 +22,19 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-    - uses: actions/checkout@v2
-    - name: Generate coverage report
-      run: |
-        yarn install
-        yarn db:migrate
-        yarn db:seed
-        yarn test:cov
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-        directory: ./coverage/
-        flags: unittests # optional
-        name: codecov-umbrella # optional
-        fail_ci_if_error: true # optional (default = false)
-        verbose: true # optional (default = false)
+      - uses: actions/checkout@v2
+      - name: Generate coverage report
+        run: |
+          yarn install
+          yarn db:migrate
+          yarn db:seed
+          yarn test:cov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          directory: ./coverage/
+          flags: unittests # optional
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)
