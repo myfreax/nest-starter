@@ -28,6 +28,8 @@ model Permission {
   attributes String
   action     PermissionAction
   roles      Role[]
+
+  @@unique([resource, attributes, action], name: "Permission_resource_attributes_action_key")
 }
 
 enum PermissionAction {
