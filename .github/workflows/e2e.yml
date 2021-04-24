@@ -25,6 +25,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: yarn test:e2e
         run: |
+          echo 'DATABASE_URL="postgresql://postgres:randompassword@postgres:5432/mydb?schema=public"' > .env
           yarn install
           yarn db:migrate
           yarn db:seed
