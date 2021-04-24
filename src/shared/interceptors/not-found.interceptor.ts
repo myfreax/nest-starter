@@ -15,17 +15,12 @@ export class NotFoundInterceptor implements NestInterceptor {
     this.message = message;
   }
   intercept(context: ExecutionContext, stream$: CallHandler): Observable<any> {
-    const request = context.switchToHttp().getRequest<Request>();
-    if (context.getType() === 'http' && request.method == 'GET') {
-      return stream$.handle().pipe(
-        tap((data) => {
-          if (data === undefined || data == null) {
-            throw new NotFoundException(this.message);
-          }
-        }),
-      );
-    } else {
-      return stream$.handle();
-    }
+    return stream$.handle().pipe(
+      tap((data) => {
+        if (data === undefined || data == null) {
+          throw new NotFoundException(this.message);
+        }
+      }),
+    );
   }
 }
