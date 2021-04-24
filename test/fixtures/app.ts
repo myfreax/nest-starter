@@ -1,7 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { TestingModule, Test } from '@nestjs/testing';
 import { useContainer } from 'class-validator';
-import { NotFoundInterceptor } from '../../src/shared/interceptors/not-found.Interceptor';
 import { AppModule } from '../../src/app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { CreateUsersDto } from '../../src/users/dto/create-users.dto';
@@ -18,7 +17,6 @@ export const createApp = async (): Promise<INestApplication> => {
   }).compile();
 
   const app: INestApplication = moduleFixture.createNestApplication();
-  app.useGlobalInterceptors(new NotFoundInterceptor());
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   app.useGlobalPipes(

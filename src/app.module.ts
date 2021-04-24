@@ -9,15 +9,15 @@ import { UsersModule } from './users/users.module';
 import { ApiModule } from './api/api.module';
 import { routes } from './routes';
 import { APP_GUARD } from '@nestjs/core';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RolesModule } from './roles/roles.module';
 import { PermissionsModule } from './permissions/permissions.module';
+import jwtConfig from './config/jwt.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath:
-        process.env.NODE_ENV == 'development' ? '.env' : '.porduction.env',
+      load: [jwtConfig],
     }),
     RouterModule.forRoutes(routes),
     AuthModule,
@@ -29,6 +29,7 @@ import { PermissionsModule } from './permissions/permissions.module';
   ],
   controllers: [AppController],
   providers: [
+    ConfigService,
     AppService,
     {
       provide: APP_GUARD,

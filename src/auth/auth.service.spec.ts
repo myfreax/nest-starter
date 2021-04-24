@@ -1,4 +1,4 @@
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users/users.service';
@@ -8,6 +8,8 @@ import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 import { SharedModule } from '../shared/shared.module';
 import { PrismaService } from '../shared/prisma.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import jwtConfig from '../config/jwt.config';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -19,12 +21,19 @@ describe('AuthService', () => {
         SharedModule,
         UsersModule,
         PassportModule,
-        JwtModule.register({
-          secret: process.env.JWTSECRET || '',
-          signOptions: { expiresIn: process.env.EXPRESIN || '' },
+        ConfigModule.forRoot({ load: [jwtConfig] }),
+        JwtModule.registerAsync({
+          imports: [ConfigModule],
+          useFactory: async (
+            configService: ConfigService,
+          ): Promise<JwtModuleOptions> => {
+            return configService.get<JwtModuleOptions>('jwt');
+          },
+          inject: [ConfigService],
         }),
       ],
       providers: [
+        ConfigService,
         PrismaService,
         AuthService,
         LocalStrategy,
