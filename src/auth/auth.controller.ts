@@ -3,8 +3,8 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { Public } from './public';
 import { ApiBearerAuth, ApiBody, ApiTags, ApiResponse } from '@nestjs/swagger';
-import { LoginDto } from './dto/login-dto';
-import { LoginedDto } from './dto/logined-dto';
+import { LoginDto } from './dto/login.dto';
+import { LoginedDto } from './dto/logined.dto';
 
 @ApiBearerAuth()
 @ApiTags('Auth')

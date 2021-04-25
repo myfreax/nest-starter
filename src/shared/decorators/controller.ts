@@ -8,7 +8,7 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { TokenExpired } from '../../auth/dto/token-expired-dto';
+import { TokenExpired } from '../../auth/dto/token-expired.dto';
 import { ParamsValidateFailDto } from '../dto/params-validate-fail.dto';
 
 export function Controller(controllerName: string) {

@@ -4,7 +4,7 @@ import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { ID, IdDto } from '../../shared/dto/id.dto';
 import { IsExist } from '../../shared/validators/exist';
-import { createEnum } from '../../shared/operator/create-enum';
+import { createEnum } from '../../shared/operator/create.enum';
 
 // TODO: this Action only read, But now you can overwrite action perproty, fix it.
 export const Action = createEnum<typeof PermissionAction>({
