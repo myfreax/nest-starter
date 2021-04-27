@@ -25,9 +25,10 @@ describe('PermissionsController', () => {
       const createPermissionDto: CreatePermissionDto = {
         resource: PermissionResource.permission,
         action: PermissionAction.create_any,
-        attributes: '*,!view',
+        attributes: '*,!view,commnent',
       };
-      return controller.create(createPermissionDto);
+      permission = await controller.create(createPermissionDto);
+      return permission;
     };
   });
 
@@ -59,7 +60,7 @@ describe('PermissionsController', () => {
     permission = await createPermission();
     const updatePermissionDto: UpdatePermissionDto = {
       action: PermissionAction.read_any,
-      attributes: '*',
+      attributes: '*,!commnent',
       resource: PermissionResource.permission,
     };
     const res = await controller.update(

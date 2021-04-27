@@ -23,7 +23,7 @@ describe('PermissionsService', () => {
       const createPermissionDto: CreatePermissionDto = {
         resource: PermissionResource.permission,
         action: PermissionAction.create_any,
-        attributes: '*',
+        attributes: '*,rate,view',
       };
       permission = await service.create(createPermissionDto);
       return permission;
@@ -33,11 +33,13 @@ describe('PermissionsService', () => {
   beforeEach(() => {
     permission = null;
   });
+
   afterEach(async () => {
     if (permission) {
       await service.remove({ id: permission.id });
     }
   });
+
   afterAll(() => {
     module.close();
   });
