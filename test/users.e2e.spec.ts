@@ -41,6 +41,7 @@ describe('UsersController (e2e)', () => {
   afterAll(async () => {
     app.close();
   });
+
   it('/api/users (POST) create user without token', async () => {
     return request(server).post(apiEndPoint).send(makeUser()).expect(401);
   });
