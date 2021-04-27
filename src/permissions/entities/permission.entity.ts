@@ -1,5 +1,9 @@
-import { Permission, PermissionAction } from '@prisma/client';
-import { IsString } from 'class-validator';
+import {
+  Permission,
+  PermissionAction,
+  PermissionResource,
+} from '@prisma/client';
+import { IsString, IsEnum, MinLength } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { ID, IdDto } from '../../shared/dto/id.dto';
@@ -24,15 +28,16 @@ export class PermissionEntity extends IdDto implements Permission {
   })
   @Type(() => String)
   @Expose()
-  @IsString()
-  resource: string;
+  @IsEnum(PermissionResource)
+  resource: PermissionResource;
 
   @ApiProperty({
     example: PermissionAction.create_any,
     enum: PermissionAction,
   })
   @Expose()
-  @IsString()
+  @Type(() => String)
+  @IsEnum(PermissionAction)
   action: PermissionAction;
 
   @ApiProperty({
@@ -41,6 +46,7 @@ export class PermissionEntity extends IdDto implements Permission {
   @IsString()
   @Expose()
   @Type(() => String)
+  @MinLength(1)
   attributes: string;
 }
 
@@ -52,4 +58,6 @@ export class CheckIdDto extends IdDto {
 
 export class UniqueField
   extends IdDto
-  implements PropertyOption<PermissionEntity> {}
+  implements PropertyOption<PermissionEntity> {
+  permission: Permission;
+}

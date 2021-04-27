@@ -1,4 +1,4 @@
-import { PermissionAction } from '.prisma/client';
+import { PermissionAction, PermissionResource } from '.prisma/client';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SharedModule } from '../shared/shared.module';
 import { CreatePermissionDto } from './dto/create-permission.dto';
@@ -21,7 +21,7 @@ describe('PermissionsService', () => {
 
     createPermission = async () => {
       const createPermissionDto: CreatePermissionDto = {
-        resource: 'test',
+        resource: PermissionResource.permission,
         action: PermissionAction.create_any,
         attributes: '*',
       };
@@ -53,7 +53,7 @@ describe('PermissionsService', () => {
   it('should be update permission', async () => {
     permission = await createPermission();
     const updatePermissionDto: UpdatePermissionDto = {
-      resource: 'xxx',
+      resource: PermissionResource.permission,
       attributes: '*,!view',
       action: PermissionAction.read_any,
     };

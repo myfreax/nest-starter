@@ -1,4 +1,12 @@
-import { Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UsePipes,
+} from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
@@ -6,11 +14,13 @@ import { PermissionEntity, CheckIdDto } from './entities/permission.entity';
 import { IdDto } from '../shared/dto/id.dto';
 import { Controller } from '../shared/decorators/controller';
 import { Find } from '../shared/decorators/find';
+import { DuplicatePipe } from '../shared/pipes/duplicate.pipe';
 
 @Controller('Permissions')
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 
+  @UsePipes(DuplicatePipe)
   @Post()
   create(
     @Body() createPermissionDto: CreatePermissionDto,
