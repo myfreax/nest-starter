@@ -25,7 +25,7 @@
     "dev:start": "nest start --watch",
     "test": "jest",
     "test:cov": "jest --coverage",
-    "test:e2e": "jest --config jest.json",
+    "test:e2e": "jest --detectOpenHandles --config jest.json",
     "prod:deploy": "NODE_ENV=production dotenv-flow -- yarn prisma migrate deploy --preview-feature",
     "prod:start": "NODE_ENV=production dotenv-flow -- node dist/main",
     "prod:seed": "NODE_ENV=production dotenv-flow -- yarn dev yarn ts-node prisma/seed.ts",
