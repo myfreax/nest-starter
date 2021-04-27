@@ -7,13 +7,13 @@ import {
   Validate,
 } from 'class-validator';
 import { PrismaService } from '../prisma.service';
-import { Tables } from '../prisma.service';
+import { Table } from '../prisma.service';
 
 type Options = {
   /**
    * Specify in which table to find
    */
-  table: Tables;
+  table: Table;
 
   /**
    * You need specify field name when decorate field not exist in table
@@ -63,7 +63,7 @@ type ExistOption<T> = {
   /**
    * Specify in which table to find
    */
-  table: Tables;
+  table: Table;
   /**
    * You need specify field name when decorate field not exist in table
    * example: roleId is require when you create user. But role table is not field roleId
