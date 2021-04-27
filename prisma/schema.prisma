@@ -1,3 +1,4 @@
+// TODO: you must manual add model to Resource enum when you create new Model
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,13 +24,20 @@ model Role {
 }
 
 model Permission {
-  id         Int              @id @default(autoincrement())
-  resource   String
+  id         Int                @id @default(autoincrement())
+  resource   PermissionResource
   attributes String
   action     PermissionAction
   roles      Role[]
 
-  @@unique([resource, attributes, action], name: "Permission_resource_attributes_action_key")
+  @@unique([resource, attributes, action], name: "permission")
+}
+
+// TODO: you must manual add model to Resource enum when you create new Model
+enum PermissionResource {
+  user        @map("user")
+  permission  @map("permission")
+  role        @map("role")
 }
 
 enum PermissionAction {

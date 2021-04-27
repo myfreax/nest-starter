@@ -1,76 +1,80 @@
-import { PrismaClient, Permission, PermissionAction } from '@prisma/client';
-import { CreatePermissionDto } from 'src/permissions/dto/create-permission.dto';
+import {
+  PrismaClient,
+  PermissionAction,
+  PermissionResource,
+} from '@prisma/client';
+import { CreatePermissionDto } from '../src/permissions/dto/create-permission.dto';
 const prisma = new PrismaClient();
 
 async function main() {
   const permissions: CreatePermissionDto[] = [
     {
-      resource: 'permission',
+      resource: PermissionResource.permission,
       attributes: '*',
       action: PermissionAction.create_any,
     },
     {
-      resource: 'permission',
+      resource: PermissionResource.permission,
       attributes: '*',
       action: PermissionAction.read_any,
     },
     {
-      resource: 'permission',
+      resource: PermissionResource.permission,
       attributes: '*',
       action: PermissionAction.update_any,
     },
     {
-      resource: 'permission',
+      resource: PermissionResource.permission,
       attributes: '*',
       action: PermissionAction.delete_any,
     },
     {
-      resource: 'role',
+      resource: PermissionResource.role,
       attributes: '*',
       action: PermissionAction.create_any,
     },
     {
-      resource: 'role',
+      resource: PermissionResource.role,
       attributes: '*',
       action: PermissionAction.read_any,
     },
     {
-      resource: 'role',
+      resource: PermissionResource.role,
       attributes: '*',
       action: PermissionAction.update_any,
     },
     {
-      resource: 'role',
+      resource: PermissionResource.role,
       attributes: '*',
       action: PermissionAction.delete_any,
     },
     {
-      resource: 'user',
+      resource: PermissionResource.user,
       attributes: '*',
       action: PermissionAction.create_any,
     },
     {
-      resource: 'user',
+      resource: PermissionResource.user,
       attributes: '*',
       action: PermissionAction.read_any,
     },
     {
-      resource: 'user',
+      resource: PermissionResource.user,
       attributes: '*',
       action: PermissionAction.update_any,
     },
     {
-      resource: 'user',
+      resource: PermissionResource.user,
       attributes: '*',
       action: PermissionAction.delete_any,
     },
     {
-      resource: 'user',
+      resource: PermissionResource.user,
       attributes: '*',
       action: PermissionAction.update_own,
     },
     {
-      resource: 'user',
+      resource: PermissionResource.user,
       attributes: '*',
       action: PermissionAction.delete_own,
     },
