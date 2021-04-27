@@ -18,9 +18,8 @@ async function bootstrap() {
   );
   const config = new DocumentBuilder()
     .setTitle('nest-starter')
-    .setDescription('The nest-starts API description')
+    .setDescription('The nest-starter API description')
     .setVersion('0.1.0')
-    .addTag('auth')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config, {
