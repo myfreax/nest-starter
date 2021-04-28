@@ -1,5 +1,4 @@
-export function createEnum<T>(
-  o: Record<keyof T, string>,
-): Record<keyof T, string> {
-  return o;
+type record<T> = Record<keyof T, string>;
+export function createEnum<T>(o: record<T>): record<T> {
+  return Object.freeze(o);
 }
