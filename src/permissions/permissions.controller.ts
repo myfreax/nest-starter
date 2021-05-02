@@ -15,11 +15,16 @@ import { IdDto } from '../shared/dto/id.dto';
 import { Controller } from '../shared/decorators/controller';
 import { Find } from '../shared/decorators/find';
 import { DuplicatePipe } from '../shared/pipes/duplicate.pipe';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('Permissions')
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
-
+  @ApiResponse({
+    status: 201,
+    type: () => PermissionEntity,
+    description: 'Create User.',
+  })
   @UsePipes(DuplicatePipe)
   @Post()
   create(
@@ -29,7 +34,7 @@ export class PermissionsController {
   }
 
   @Find({
-    description: 'find all permission',
+    description: 'Find all permission',
     type: () => PermissionEntity,
     isArray: true,
   })
@@ -39,7 +44,7 @@ export class PermissionsController {
   }
 
   @Find({
-    description: 'find permission by id',
+    description: 'Find permission by id',
     type: () => PermissionEntity,
   })
   @Get(':id')
@@ -47,6 +52,11 @@ export class PermissionsController {
     return this.permissionsService.findOne({ id: idDto.id });
   }
 
+  @ApiResponse({
+    status: 200,
+    type: () => PermissionEntity,
+    description: 'Update user by id.',
+  })
   @Patch(':id')
   update(
     @Param() idDto: CheckIdDto,
@@ -58,6 +68,11 @@ export class PermissionsController {
     );
   }
 
+  @ApiResponse({
+    status: 200,
+    type: () => PermissionEntity,
+    description: 'Remove user by id.',
+  })
   @Delete(':id')
   remove(@Param() idDto: CheckIdDto): Promise<PermissionEntity> {
     return this.permissionsService.remove({ id: idDto.id });

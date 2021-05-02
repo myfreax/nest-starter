@@ -8,14 +8,14 @@ import { IdDto } from '../shared/dto/id.dto';
 import { Controller } from '../shared/decorators/controller';
 import { Find } from '../shared/decorators/find';
 
-@Controller('users')
+@Controller('Users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiResponse({
     status: 201,
     type: () => UserEntity,
-    description: 'Created User.',
+    description: 'Create User.',
   })
   @Post()
   create(@Body() createUsersDto: CreateUsersDto): Promise<UserEntity> {
@@ -23,7 +23,7 @@ export class UsersController {
   }
 
   @Find({
-    description: 'find user by id',
+    description: 'Find user by id',
     type: () => UserEntity,
     isArray: true,
   })
@@ -32,7 +32,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Find({ description: 'find user by id', type: () => UserEntity })
+  @Find({ description: 'Find user by id', type: () => UserEntity })
   @Get(':id')
   findOne(@Param() idDto: IdDto): Promise<UserEntity> {
     return this.usersService.findOne({ id: idDto.id });
@@ -41,7 +41,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     type: () => UserEntity,
-    description: 'update user by id.',
+    description: 'Update user by id.',
   })
   @Patch(':id')
   update(
@@ -54,7 +54,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     type: () => UserEntity,
-    description: 'remove user by id.',
+    description: 'Remove user by id.',
   })
   @Delete(':id')
   remove(@Param() idDto: CheckIdDto): Promise<UserEntity> {
