@@ -8,7 +8,7 @@ import { RoleEntity } from './entities/role.entity';
 import { IdDto } from '../shared/dto/id.dto';
 import { ApiResponse } from '@nestjs/swagger';
 
-Controller('Roles');
+@Controller('Roles')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
